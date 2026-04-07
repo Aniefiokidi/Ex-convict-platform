@@ -44,6 +44,20 @@ npm run dev
 
 Visit http://localhost:3000
 
+## Deploying To Vercel
+
+1. Import this repository in Vercel.
+2. Add environment variables in Vercel Project Settings:
+	- `DATABASE_URL`
+	- `SESSION_PASSWORD` (minimum 32 characters)
+	- `NEXT_PUBLIC_SITE_URL` (set to your production URL)
+	- `CLOUDINARY_CLOUD_NAME` (if uploads are used)
+	- `CLOUDINARY_API_KEY` (if uploads are used)
+	- `CLOUDINARY_API_SECRET` (if uploads are used)
+3. Deploy with the default Next.js settings.
+
+Note: `postinstall` runs `prisma generate` automatically during install so Prisma Client is available at build/runtime.
+
 ## Architecture
 
 - **Frontend**: Next.js pages with Tailwind CSS styling
