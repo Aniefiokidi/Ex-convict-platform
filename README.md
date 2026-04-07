@@ -54,9 +54,12 @@ Visit http://localhost:3000
 	- `CLOUDINARY_CLOUD_NAME` (if uploads are used)
 	- `CLOUDINARY_API_KEY` (if uploads are used)
 	- `CLOUDINARY_API_SECRET` (if uploads are used)
-3. Deploy with the default Next.js settings.
+3. Deploy. The included `vercel.json` runs `npm run vercel-build`, which executes:
+	- `prisma generate`
+	- `prisma db push`
+	- `next build`
 
-Note: `postinstall` runs `prisma generate` automatically during install so Prisma Client is available at build/runtime.
+Note: Production should use PostgreSQL. SQLite is not recommended on Vercel serverless functions.
 
 ## Architecture
 
