@@ -9,7 +9,7 @@
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
-    "vercel-build": "prisma generate && prisma db push && next build",
+    "vercel-build": "prisma generate && prisma db push && node scripts/seedProduction.js && next build",
     "lint": "next lint"
   },
   "dependencies": {
