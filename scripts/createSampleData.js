@@ -151,58 +151,58 @@ async function main() {
   
   const jobs = [
     {
-      title: 'Warehouse Associate',
-      company: 'GoodCompany Logistics',
-      description: 'Entry-level warehouse position with opportunities for advancement. We provide on-the-job training and support career development.',
-      requirements: 'Ability to lift 50lbs, reliable transportation, willingness to learn',
-      salary: '$16-18/hour',
+      title: 'Administrative Officer',
+      company: 'GoodCompany Group',
+      description: 'We are seeking a professional Administrative Officer to support our executive team and ensure smooth day-to-day office operations. Responsibilities include managing correspondence, scheduling meetings, maintaining filing systems, and coordinating cross-departmental activities. GoodCompany Group is a proud second-chance employer committed to workforce inclusion.',
+      requirements: 'Minimum OND/HND or equivalent; proficiency in Microsoft Office Suite; strong organisational and communication skills; ability to multitask and manage competing priorities. Prior administrative experience is an advantage.',
+      salary: '$2,200-$2,800/month',
       location: 'Corporate City',
       employerId: employerUsers[0]?.id
     },
     {
-      title: 'Construction Laborer',
-      company: 'ConstructionCorp',
-      description: 'Join our team building homes and commercial buildings. Second chance employer with comprehensive training program.',
-      requirements: 'Physical fitness, safety-minded, team player',
-      salary: '$18-22/hour',
-      location: 'Builder Town',
+      title: 'IT Support Technician',
+      company: 'BuildTech Solutions',
+      description: 'BuildTech Solutions is hiring an IT Support Technician to provide first- and second-line technical support to staff across our offices. You will troubleshoot hardware and software issues, manage user accounts, maintain IT asset records, and support network infrastructure. We welcome applicants from all backgrounds and provide structured on-boarding and professional development.',
+      requirements: 'CompTIA A+ or equivalent certification (or demonstrated equivalent experience); knowledge of Windows 10/11 environments; strong diagnostic and problem-solving skills; excellent customer-service orientation.',
+      salary: '$2,500-$3,200/month',
+      location: 'Tech District',
       employerId: employerUsers[1]?.id
     },
     {
-      title: 'Kitchen Staff',
-      company: 'Hospitality Group',
-      description: 'Kitchen prep and cooking positions available. We believe in second chances and provide a supportive work environment.',
-      requirements: 'Food safety knowledge preferred, reliable, fast-paced environment',
-      salary: '$15-17/hour',
-      location: 'Hospitality City',
+      title: 'Human Resources Assistant',
+      company: 'Horizon People Services',
+      description: 'Horizon People Services is looking for a detail-oriented Human Resources Assistant to support our HR department. Key duties include maintaining employee records, coordinating recruitment logistics, onboarding new hires, and assisting with payroll processing. We believe every individual deserves a fair opportunity and actively practice inclusive hiring.',
+      requirements: 'Diploma or degree in Human Resources Management, Business Administration, or related field; familiarity with HRIS software; strong interpersonal and confidentiality skills; ability to work effectively in a team environment.',
+      salary: '$2,000-$2,500/month',
+      location: 'Business Park',
       employerId: employerUsers[2]?.id
     },
     {
-      title: 'Customer Service Representative',
-      company: 'GoodCompany',
-      description: 'Handle customer inquiries via phone and email. Training provided. Looking for people with strong communication skills.',
-      requirements: 'High school diploma, good communication skills, computer literacy',
-      salary: '$17-20/hour',
+      title: 'Marketing Coordinator',
+      company: 'GoodCompany Group',
+      description: 'GoodCompany Group is seeking a Marketing Coordinator to support the development and execution of marketing campaigns across digital and traditional channels. Responsibilities include coordinating content creation, managing social media calendars, tracking campaign performance, and liaising with external vendors. Full training is provided for candidates with the right attitude and aptitude.',
+      requirements: 'HND/BSc in Marketing, Communications, or related discipline; solid written and verbal communication skills; experience with social media platforms and basic design tools (Canva, Adobe); analytical mindset with attention to detail.',
+      salary: '$2,300-$2,900/month',
       location: 'Corporate City',
       employerId: employerUsers[0]?.id
     },
     {
-      title: 'Maintenance Technician',
-      company: 'ConstructionCorp',
-      description: 'Maintain and repair equipment and facilities. Great opportunity to learn technical skills.',
-      requirements: 'Basic mechanical knowledge, problem-solving skills, attention to detail',
-      salary: '$20-25/hour',
-      location: 'Builder Town',
+      title: 'Financial Analyst (Entry-Level)',
+      company: 'BuildTech Solutions',
+      description: 'This entry-level Financial Analyst role offers an outstanding opportunity to build a career in finance within a growing technology services company. You will assist with budget preparation, variance analysis, financial reporting, and forecasting. BuildTech Solutions mentors junior finance professionals and provides a clear progression path toward senior analyst and management roles.',
+      requirements: 'BSc/HND in Accounting, Finance, or Economics; understanding of financial statements and basic accounting principles; proficiency in Microsoft Excel; strong numerical reasoning and attention to detail. ICAN or ACCA student membership is a plus.',
+      salary: '$2,800-$3,500/month',
+      location: 'Tech District',
       employerId: employerUsers[1]?.id
     },
     {
-      title: 'Delivery Driver',
-      company: 'GoodCompany Logistics',
-      description: 'Local delivery routes. Clean driving record required. Company vehicle provided.',
-      requirements: 'Valid driver license, clean driving record, punctual',
-      salary: '$16-19/hour plus tips',
-      location: 'Corporate City',
-      employerId: employerUsers[0]?.id
+      title: 'Operations Coordinator',
+      company: 'Horizon People Services',
+      description: 'Horizon People Services is recruiting an Operations Coordinator to streamline and improve internal business processes. You will monitor daily operational workflows, liaise between departments, prepare management reports, and identify opportunities for efficiency gains. The role carries genuine career progression potential within our rapidly expanding organisation.',
+      requirements: 'Degree or HND in Business Administration, Management, or a related field; strong analytical and project-management skills; proficiency with productivity tools (Microsoft 365 or Google Workspace); excellent communication and stakeholder-management abilities.',
+      salary: '$2,400-$3,000/month',
+      location: 'Business Park',
+      employerId: employerUsers[2]?.id
     }
   ]
 
