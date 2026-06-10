@@ -157,10 +157,12 @@ async function main() {
   })
   console.log('✅ Mentor profiles ready.')
 
-  // ── Jobs (seed if empty, Nigerian locations & Naira salaries) ────────────────
-  const jobCount = await prisma.job.count()
-  if (jobCount === 0) {
-    console.log('💼 Seeding job listings...')
+  // ── Jobs (always refresh to ensure Naira salaries & Nigerian locations) ──────
+  console.log('💼 Refreshing job listings...')
+  // Delete applications first (FK constraint), then jobs
+  await prisma.jobApplication.deleteMany({})
+  await prisma.job.deleteMany({})
+  if (true) {
     await prisma.job.createMany({
       data: [
         {
@@ -264,9 +266,7 @@ async function main() {
         },
       ],
     })
-    console.log('✅ Job listings created.')
-  } else {
-    console.log(`⏭️  Jobs already seeded (${jobCount} found), skipping.`)
+    console.log('✅ Job listings refreshed with Naira salaries.')
   }
 
   // ── Training programmes ───────────────────────────────────────────────────────
