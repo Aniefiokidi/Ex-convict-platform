@@ -88,131 +88,111 @@ export default function Home({ currentUser }) {
     <div className="min-h-screen bg-gray-900 overflow-x-hidden">
       <Navbar currentUser={currentUser} />
       
-      {/* Hero Section with Animated Background */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900"></div>
-        
-        {/* Floating Particles */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-white rounded-full opacity-20 animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`
-              }}
-            ></div>
-          ))}
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-600 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
         </div>
 
-        {/* Geometric Shapes */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-32 h-32 border border-blue-400 rounded-full animate-spin opacity-10" style={{ animationDuration: '20s' }}></div>
-          <div className="absolute bottom-20 right-10 w-48 h-48 border border-purple-400 rounded-full animate-ping opacity-10" style={{ animationDuration: '4s' }}></div>
-          <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg animate-bounce opacity-20" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute bottom-1/3 right-1/3 w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse opacity-30"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text + CTAs */}
+            <div className="text-white animate-fade-in-up">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/20 border border-blue-400/30 rounded-full text-blue-300 text-sm font-medium mb-6">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                2,500+ Citizens Reintegrated
+              </div>
+
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6">
+                A Fresh Start<br />
+                <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Begins Here</span>
+              </h1>
+
+              <p className="text-lg text-blue-100/80 mb-8 max-w-lg">
+                Find jobs, gain skills, and connect with mentors who believe in second chances.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                {!currentUser ? (
+                  <>
+                    <Link href="/register" className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all duration-200 shadow-lg shadow-blue-600/30 text-center">
+                      Get Started — Free
+                    </Link>
+                    <Link href="/jobs" className="px-8 py-4 border border-white/20 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all duration-200 text-center">
+                      Browse Jobs
+                    </Link>
+                  </>
+                ) : (
+                  <Link href={`/dashboard/${currentUser.role.toLowerCase().replace('_', '-')}`} className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all duration-200 shadow-lg shadow-blue-600/30">
+                    Go to Dashboard
+                  </Link>
+                )}
+              </div>
+
+              <div className="flex items-center gap-6 mt-10 text-sm text-blue-200/70">
+                <span className="flex items-center gap-1.5"><span className="text-green-400 font-bold">✓</span> Free to use</span>
+                <span className="flex items-center gap-1.5"><span className="text-green-400 font-bold">✓</span> Verified employers</span>
+                <span className="flex items-center gap-1.5"><span className="text-green-400 font-bold">✓</span> Confidential</span>
+              </div>
+            </div>
+
+            {/* Right: Visual illustration */}
+            <div className="hidden lg:flex items-center justify-center animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+              <div className="relative w-full max-w-md">
+                {/* Main card */}
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-2xl">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                      <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-white font-bold text-lg">Welcome Back</div>
+                      <div className="text-blue-200 text-sm">Your journey continues</div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 mb-6">
+                    {[
+                      { icon: '💼', label: 'Jobs Available', value: '500+', color: 'bg-blue-500/20 text-blue-300' },
+                      { icon: '🎓', label: 'Training Programs', value: '150+', color: 'bg-purple-500/20 text-purple-300' },
+                      { icon: '🤝', label: 'Active Mentors', value: '200+', color: 'bg-green-500/20 text-green-300' },
+                    ].map(item => (
+                      <div key={item.label} className="flex items-center justify-between bg-white/5 rounded-xl px-4 py-3">
+                        <div className="flex items-center gap-3 text-white/80 text-sm">
+                          <span>{item.icon}</span>
+                          <span>{item.label}</span>
+                        </div>
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${item.color}`}>{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-4 text-center">
+                    <div className="text-white font-bold text-2xl">85%</div>
+                    <div className="text-blue-100 text-sm">Job Placement Success Rate</div>
+                  </div>
+                </div>
+
+                {/* Floating badge */}
+                <div className="absolute -top-4 -right-4 bg-green-500 text-white text-xs font-bold px-3 py-2 rounded-full shadow-lg animate-bounce">
+                  Hiring Now!
+                </div>
+                <div className="absolute -bottom-4 -left-4 bg-purple-600 text-white text-xs font-bold px-3 py-2 rounded-full shadow-lg">
+                  Free to Join
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Moving Background Waves */}
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden">
-          <svg className="relative block w-full h-40" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path 
-              d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" 
-              className="fill-blue-600 opacity-30 animate-pulse"
-            ></path>
+        {/* Wave */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+          <svg viewBox="0 0 1200 80" preserveAspectRatio="none" className="w-full h-12 text-gray-900 fill-current">
+            <path d="M0,40 C300,80 900,0 1200,40 L1200,80 L0,80 Z" />
           </svg>
-        </div>
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <div className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white mb-8 leading-tight">
-              <span className="block animate-slide-in-left" style={{ animationDelay: '0.5s', lineHeight: '1.1' }}>
-                Rebuildin<span className="inline-block transform hover:scale-110 transition-transform duration-300" style={{ marginRight: '0.1em' }}>g</span> Lives,
-              </span>
-              <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-slide-in-right" style={{ animationDelay: '0.8s', lineHeight: '1.1' }}>
-                Creating Futures
-              </span>
-            </h1>
-            
-            <p className="max-w-4xl mx-auto text-xl lg:text-2xl text-blue-100 mb-12 leading-relaxed animate-fade-in-up" style={{ animationDelay: '1.1s' }}>
-              Your past doesn't define your future. Join <span className="text-yellow-400 font-bold">thousands</span> who've transformed their lives through 
-              employment opportunities, professional training, and supportive community.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-fade-in-up" style={{ animationDelay: '1.4s' }}>
-              {!currentUser ? (
-                <>
-                  <Link 
-                    href="/register"
-                    className="group relative w-full sm:w-auto bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 animate-pulse"
-                  >
-                    <span className="relative z-10">🚀 Start Your Journey Today</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </Link>
-                  <Link 
-                    href="/jobs"
-                    className="w-full sm:w-auto border-2 border-white text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-white hover:text-purple-900 transition-all duration-300 backdrop-blur-sm bg-white/10"
-                  >
-                    ✨ Explore Opportunities
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link 
-                    href={`/dashboard/${currentUser.role.toLowerCase().replace('_', '-')}`}
-                    className="group relative w-full sm:w-auto bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-300 shadow-2xl"
-                  >
-                    <span className="relative z-10">🏠 Go to Dashboard</span>
-                  </Link>
-                  <Link 
-                    href="/profile"
-                    className="w-full sm:w-auto border-2 border-white text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-white hover:text-purple-900 transition-all duration-300 backdrop-blur-sm bg-white/10"
-                  >
-                    👤 Complete Profile
-                  </Link>
-                </>
-              )}
-            </div>
-
-            {/* Trust Indicators with Icons */}
-            <div className="flex flex-wrap justify-center items-center gap-8 text-blue-200 animate-fade-in-up" style={{ animationDelay: '1.7s' }}>
-              <div className="flex items-center transform hover:scale-110 transition-transform">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span className="font-semibold">💯 Free to Use</span>
-              </div>
-              <div className="flex items-center transform hover:scale-110 transition-transform">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span className="font-semibold">✅ Verified Employers</span>
-              </div>
-              <div className="flex items-center transform hover:scale-110 transition-transform">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span className="font-semibold">🔒 Confidential & Secure</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
-          </div>
         </div>
       </section>
 
@@ -572,10 +552,13 @@ export default function Home({ currentUser }) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">ER</span>
+                <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-purple-700 rounded-xl flex items-center justify-center shadow-md">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1M4.22 4.22l.71.71m14.14 14.14.71.71M3 12H2m20 0h-1" />
+                  </svg>
                 </div>
-                <span className="font-bold text-xl">Ex-Convict Platform</span>
+                <span className="font-black text-xl">ReStart Platform</span>
               </div>
               <p className="text-gray-400 mb-4">
                 Empowering returning citizens with opportunities for successful reintegration and meaningful careers.

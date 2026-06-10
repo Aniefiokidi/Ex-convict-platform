@@ -14,6 +14,11 @@ export default function Trainings({ currentUser }) {
       alert('Please log in to enroll')
       return
     }
+
+    if (currentUser.role === 'EMPLOYER') {
+      alert('Training enrollment is only available for job seekers.')
+      return
+    }
     
     setEnrolling(trainingId)
     try {
@@ -73,6 +78,14 @@ export default function Trainings({ currentUser }) {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Develop new skills and advance your career with our comprehensive training programs
             </p>
+            {currentUser?.role === 'EMPLOYER' && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 text-amber-700 rounded-lg text-sm font-medium mt-4">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Enrollment is only available for job seekers
+              </div>
+            )}
           </div>
 
           {data.trainings.length === 0 ? (
@@ -118,20 +131,26 @@ export default function Trainings({ currentUser }) {
                   <p className="text-gray-600 mb-6 flex-grow">{training.description}</p>
                   
                   <div className="mt-auto">
-                    <button 
-                      onClick={() => handleEnroll(training.id)}
-                      disabled={enrolling === training.id}
-                      className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {enrolling === training.id ? (
-                        <div className="flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          Enrolling...
-                        </div>
-                      ) : (
-                        'Enroll Now'
-                      )}
-                    </button>
+                    {currentUser?.role === 'EMPLOYER' ? (
+                      <div className="w-full px-4 py-3 bg-gray-100 text-gray-500 rounded-lg text-center text-sm font-medium cursor-not-allowed">
+                        Not available for employers
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handleEnroll(training.id)}
+                        disabled={enrolling === training.id}
+                        className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {enrolling === training.id ? (
+                          <div className="flex items-center justify-center">
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            Enrolling...
+                          </div>
+                        ) : (
+                          'Enroll Now'
+                        )}
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

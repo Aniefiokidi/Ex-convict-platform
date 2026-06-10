@@ -17,6 +17,11 @@ export default function Mentors({ currentUser }) {
       alert('Please log in to book a session')
       return
     }
+
+    if (currentUser.role === 'EMPLOYER') {
+      alert('Mentorship booking is only available for job seekers.')
+      return
+    }
     
     // Get mentor details for success page
     const mentor = data.mentors.find(m => m.id === mentorId)
@@ -100,6 +105,14 @@ export default function Mentors({ currentUser }) {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
               Connect with experienced mentors and counselors who understand your journey
             </p>
+            {currentUser?.role === 'EMPLOYER' && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 text-amber-700 rounded-lg text-sm font-medium mb-4">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Session booking is only available for job seekers
+              </div>
+            )}
             
             {/* Become a Mentor CTA */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -163,27 +176,33 @@ export default function Mentors({ currentUser }) {
                   </div>
                   
                   <div className="space-y-3">
-                    <button 
+                    <button
                       onClick={() => handleMessage(mentor.id)}
                       className="w-full px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors duration-200 font-medium"
                     >
                       💬 Message
                     </button>
-                    
-                    <button 
-                      onClick={() => handleBook(mentor.id)}
-                      disabled={booking === mentor.id}
-                      className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {booking === mentor.id ? (
-                        <div className="flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          Booking...
-                        </div>
-                      ) : (
-                        '📅 Book Session'
-                      )}
-                    </button>
+
+                    {currentUser?.role === 'EMPLOYER' ? (
+                      <div className="w-full px-4 py-3 bg-gray-100 text-gray-500 rounded-lg text-center text-sm font-medium cursor-not-allowed">
+                        Not available for employers
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handleBook(mentor.id)}
+                        disabled={booking === mentor.id}
+                        className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {booking === mentor.id ? (
+                          <div className="flex items-center justify-center">
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            Booking...
+                          </div>
+                        ) : (
+                          '📅 Book Session'
+                        )}
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

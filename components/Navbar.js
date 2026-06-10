@@ -7,6 +7,22 @@ export default function Navbar({ currentUser }) {
   const router = useRouter()
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
 
+  const isActive = (path) => {
+    if (path === '/jobs') return router.pathname.startsWith('/jobs')
+    if (path === '/trainings') return router.pathname.startsWith('/trainings')
+    if (path === '/mentors') return router.pathname.startsWith('/mentors')
+    return router.pathname === path
+  }
+
+  const navLinkClass = (path) =>
+    `relative font-medium transition-colors duration-200 pb-1 ${
+      isActive(path)
+        ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 after:rounded-full'
+        : 'text-gray-700 hover:text-blue-600'
+    }`
+
+  const isEmployer = currentUser?.role === 'EMPLOYER'
+
   const handleLogout = async () => {
     try {
       await axios.post('/api/auth/logout')
@@ -26,23 +42,39 @@ export default function Navbar({ currentUser }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">ER</span>
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-purple-700 rounded-xl flex items-center justify-center shadow-md">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1M4.22 4.22l.71.71m14.14 14.14.71.71M3 12H2m20 0h-1M4.22 19.78l.71-.71M19.07 4.93l-.71.71" />
+                <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" className="text-white opacity-90" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l2 2" />
+              </svg>
             </div>
-            <span className="font-bold text-xl gradient-text">Ex-Convict Platform</span>
+            <div className="flex flex-col leading-none">
+              <span className="font-black text-base gradient-text tracking-tight">ReStart</span>
+              <span className="text-[10px] text-gray-400 font-medium tracking-widest uppercase">Platform</span>
+            </div>
           </Link>
 
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/jobs" className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">
+            <Link href="/jobs" className={navLinkClass('/jobs')}>
               Jobs
             </Link>
-            <Link href="/trainings" className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">
-              Training
-            </Link>
-            <Link href="/mentors" className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">
-              Mentors
-            </Link>
-            <Link href="/help" className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">
+            {!isEmployer && (
+              <Link href="/trainings" className={navLinkClass('/trainings')}>
+                Training
+              </Link>
+            )}
+            {!isEmployer && (
+              <Link href="/mentors" className={navLinkClass('/mentors')}>
+                Mentors
+              </Link>
+            )}
+            {isEmployer && (
+              <Link href="/jobs/post" className={navLinkClass('/jobs/post')}>
+                Post a Job
+              </Link>
+            )}
+            <Link href="/help" className={navLinkClass('/help')}>
               Help
             </Link>
           </div>
@@ -92,7 +124,7 @@ export default function Navbar({ currentUser }) {
                       onClick={closeDropdown}
                     ></div>
                     
-                    <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 z-20 overflow-hidden">
+                    <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 z-20 overflow-y-auto max-h-[calc(100vh-80px)]">
                       {/* User Info Header */}
                       <div className="px-4 py-4 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-100">
                         <div className="flex items-center space-x-3">

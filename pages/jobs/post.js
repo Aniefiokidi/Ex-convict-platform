@@ -7,6 +7,8 @@ export default function PostJob({ currentUser }) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [location, setLocation] = useState('')
+  const [company, setCompany] = useState('')
+  const [salary, setSalary] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const router = useRouter()
@@ -15,9 +17,9 @@ export default function PostJob({ currentUser }) {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    
+
     try {
-      await axios.post('/api/jobs', { title, description, location })
+      await axios.post('/api/jobs', { title, description, location, company, salary })
       router.push('/jobs')
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to post job')
@@ -60,24 +62,46 @@ export default function PostJob({ currentUser }) {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Job Title</label>
-                <input 
-                  required 
-                  value={title} 
-                  onChange={e=>setTitle(e.target.value)} 
-                  placeholder="e.g., Customer Service Representative" 
-                  className="input-field" 
+                <label className="block text-sm font-medium text-gray-700 mb-2">Company / Organization Name <span className="text-red-500">*</span></label>
+                <input
+                  required
+                  value={company}
+                  onChange={e => setCompany(e.target.value)}
+                  placeholder="e.g., Acme Corp"
+                  className="input-field"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-                <input 
-                  value={location} 
-                  onChange={e=>setLocation(e.target.value)} 
-                  placeholder="e.g., New York, NY or Remote" 
-                  className="input-field" 
+                <label className="block text-sm font-medium text-gray-700 mb-2">Job Title <span className="text-red-500">*</span></label>
+                <input
+                  required
+                  value={title}
+                  onChange={e=>setTitle(e.target.value)}
+                  placeholder="e.g., Customer Service Representative"
+                  className="input-field"
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                  <input
+                    value={location}
+                    onChange={e=>setLocation(e.target.value)}
+                    placeholder="e.g., Lagos or Remote"
+                    className="input-field"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Salary Range</label>
+                  <input
+                    value={salary}
+                    onChange={e => setSalary(e.target.value)}
+                    placeholder="e.g., ₦80,000 – ₦120,000/mo"
+                    className="input-field"
+                  />
+                </div>
               </div>
 
               <div>
