@@ -48,15 +48,18 @@ export default function Mentors({ currentUser }) {
       return
     }
 
+    const mentor = data.mentors.find(m => m.id === mentorId)
+    if (!mentor?.userId) {
+      alert('This mentor does not have a messaging account yet.')
+      return
+    }
+
     try {
-      // Create or get existing conversation with mentor
-      const response = await axios.post('/api/conversations', {
-        participantIds: [mentorId],
+      await axios.post('/api/conversations', {
+        participantIds: [mentor.userId],
         type: 'DIRECT',
-        title: `Conversation with ${data.mentors.find(m => m.id === mentorId)?.name}`
+        title: `Conversation with ${mentor.name}`
       })
-      
-      // Redirect to messages page
       router.push('/messages')
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to start conversation')

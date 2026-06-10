@@ -15,17 +15,14 @@ async function handler(req, res) {
   if (!mentorId || !time) return res.status(400).json({ message: 'Missing fields' })
 
   try {
-    // Check if mentor exists
     const mentor = await prisma.mentor.findUnique({
       where: { id: parseInt(mentorId) },
-      include: { user: true }
+      include: { user: { select: { id: true, name: true } } }
     })
 
-    if (!mentor) {
-      return res.status(404).json({ message: 'Mentor not found' })
-    }
+    if (!mentor) return res.status(404).json({ message: 'Mentor not found' })
 
-    // Check for duplicate bookings (same user, mentor, and day)
+    // Duplicate booking check (same user + mentor + day)
     const bookingDay = new Date(time)
     bookingDay.setHours(0, 0, 0, 0)
     const nextDay = new Date(bookingDay)
@@ -35,10 +32,7 @@ async function handler(req, res) {
       where: {
         userId: user.id,
         mentorId: parseInt(mentorId),
-        time: {
-          gte: bookingDay,
-          lt: nextDay
-        }
+        time: { gte: bookingDay, lt: nextDay }
       }
     })
 
@@ -46,43 +40,39 @@ async function handler(req, res) {
       return res.status(400).json({ message: 'You already have a session with this mentor on this day' })
     }
 
-    // Create the booking
-    const booking = await prisma.booking.create({ 
+    const booking = await prisma.booking.create({
       data: { userId: user.id, mentorId: parseInt(mentorId), time: new Date(time) },
-      include: {
-        mentor: {
-          include: { user: true }
-        }
-      }
+      include: { mentor: { include: { user: { select: { id: true, name: true } } } } }
     })
 
-    // Create conversation between user and mentor
-    try {
-      await prisma.conversation.create({
-        data: {
-          participants: {
-            create: [
-              { userId: user.id },
-              { userId: mentor.user.id }
-            ]
-          },
-          messages: {
-            create: {
-              senderId: user.id,
-              content: `Hi! I've just booked a mentorship session with you for ${new Date(time).toLocaleString()}. Looking forward to our discussion!`
+    // Only create conversation if mentor has a linked user account
+    const mentorUserId = mentor.user?.id
+    if (mentorUserId && mentorUserId !== user.id) {
+      try {
+        await prisma.conversation.create({
+          data: {
+            type: 'MENTOR_SESSION',
+            title: `Mentorship session with ${mentor.user?.name || mentor.name || 'Mentor'}`,
+            participants: {
+              create: [{ userId: user.id }, { userId: mentorUserId }]
+            },
+            messages: {
+              create: {
+                senderId: user.id,
+                receiverId: mentorUserId,
+                conversationId: undefined,
+                content: `Hello! I have just booked a mentorship session for ${new Date(time).toLocaleString('en-NG')}. Looking forward to our discussion!`
+              }
             }
           }
-        }
-      })
-    } catch (conversationErr) {
-      console.error('Failed to create conversation:', conversationErr)
-      // Continue even if conversation creation fails
+        })
+      } catch (convErr) {
+        console.error('Conversation creation failed (non-fatal):', convErr)
+      }
     }
-    
-    return res.status(201).json({ 
-      booking,
-      message: `Mentorship session booked successfully with ${mentor.user.name}!`
-    })
+
+    const mentorName = mentor.user?.name || mentor.name || 'your mentor'
+    return res.status(201).json({ booking, message: `Session booked successfully with ${mentorName}!` })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ message: 'Server error' })
