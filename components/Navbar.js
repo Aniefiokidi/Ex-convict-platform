@@ -50,7 +50,7 @@ export default function Navbar({ currentUser }) {
               </svg>
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-black text-base gradient-text tracking-tight">ReStart</span>
+              <span className="font-black text-base gradient-text tracking-tight">RiseUp</span>
               <span className="text-[10px] text-gray-400 font-medium tracking-widest uppercase">Platform</span>
             </div>
           </Link>
