@@ -39,7 +39,9 @@ export default function FileUpload({
 
       const result = await response.json()
 
-      if (response.ok) {
+      if (result.skipped) {
+        onUploadError?.(result.message || 'File upload is not available right now.')
+      } else if (response.ok) {
         onUploadSuccess?.(result)
       } else {
         onUploadError?.(result.message || 'Upload failed')

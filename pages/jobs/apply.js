@@ -51,12 +51,17 @@ export default function JobApply({ currentUser }) {
         const uploadRes = await axios.post('/api/upload', formData, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
-        resumeUrl = uploadRes.data.url
+        if (uploadRes.data.skipped) {
+          // Cloudinary not configured — proceed without resume, show a note
+          setMessage({ type: 'info', text: uploadRes.data.message })
+          resumeUrl = ''
+        } else {
+          resumeUrl = uploadRes.data.url
+        }
       } catch (err) {
-        setMessage({ type: 'error', text: err.response?.data?.message || 'Resume upload failed. Please try again.' })
-        setUploading(false)
-        setLoading(false)
-        return
+        // Upload failed but don't block submission — just warn and continue
+        setMessage({ type: 'info', text: 'Resume could not be uploaded — your application will be submitted without it.' })
+        resumeUrl = ''
       }
       setUploading(false)
     }
@@ -104,6 +109,8 @@ export default function JobApply({ currentUser }) {
               <div className={`mb-5 p-4 rounded-xl text-sm font-medium ${
                 message.type === 'error'
                   ? 'bg-red-50 border border-red-200 text-red-700'
+                  : message.type === 'info'
+                  ? 'bg-amber-50 border border-amber-200 text-amber-700'
                   : 'bg-green-50 border border-green-200 text-green-700'
               }`}>
                 {message.text}

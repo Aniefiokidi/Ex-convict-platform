@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useRouter } from 'next/router'
 import { withIronSessionSsr } from 'iron-session/next'
 import Navbar from '../../components/Navbar'
 import Link from 'next/link'
@@ -11,9 +10,9 @@ const sessionOptions = {
 }
 
 export default function BecomeMentor({ currentUser }) {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [formData, setFormData] = useState({
     bio: '',
     expertise: '',
@@ -32,31 +31,24 @@ export default function BecomeMentor({ currentUser }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    setMessage('')
+    setErrorMessage('')
 
     try {
       const response = await fetch('/api/mentors/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // ensure credentials are sent for session-based auth
         credentials: 'same-origin',
         body: JSON.stringify(formData)
       })
 
       const data = await response.json()
-      console.log('[become mentor] response', response.status, data)
-      
       if (response.ok) {
-        setMessage('Application submitted successfully! We will review your application and get back to you soon.')
-        setTimeout(() => {
-          router.push('/mentors')
-        }, 3000)
+        setSubmitted(true)
       } else {
-        setMessage(data.message || 'Error submitting application')
+        setErrorMessage(data.message || 'Error submitting application')
       }
     } catch (error) {
-      console.error('[become mentor] submit error', error)
-      setMessage('Error submitting application')
+      setErrorMessage('Error submitting application. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -79,12 +71,40 @@ export default function BecomeMentor({ currentUser }) {
     )
   }
 
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar currentUser={currentUser} />
+        <div className="flex items-center justify-center min-h-[80vh] px-4">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 max-w-lg w-full text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-black text-gray-900 mb-3">Application Submitted!</h2>
+            <p className="text-gray-600 mb-2">Thank you for applying to become a mentor on RiseUp.</p>
+            <p className="text-gray-500 text-sm mb-8">Your application is now <strong>pending review</strong>. Our admin team will assess it and activate your mentor profile. You will be able to start accepting sessions once approved.</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/mentors" className="px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700">
+                Browse Mentors
+              </Link>
+              <Link href="/dashboard/ex-convict" className="px-6 py-3 border border-gray-200 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50">
+                Back to Dashboard
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen">
       <Navbar currentUser={currentUser} />
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4">
-          
+
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Become a Mentor</h1>
@@ -132,12 +152,9 @@ export default function BecomeMentor({ currentUser }) {
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Mentor Application</h2>
             
-            {message && (
-              <div className={`p-4 rounded-lg mb-6 ${message.includes('success') 
-                ? 'bg-green-100 border-green-500 text-green-700' 
-                : 'bg-red-100 border-red-500 text-red-700'
-              }`}>
-                {message}
+            {errorMessage && (
+              <div className="p-4 rounded-lg mb-6 bg-red-100 border border-red-300 text-red-700">
+                {errorMessage}
               </div>
             )}
 

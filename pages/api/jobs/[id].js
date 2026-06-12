@@ -24,6 +24,17 @@ async function handler(req, res) {
     }
   }
 
+  if (method === 'PATCH') {
+    const user = req.session.user
+    if (!user) return res.status(401).json({ message: 'Unauthorized' })
+    const job = await prisma.job.findUnique({ where: { id: Number(id) } })
+    if (!job) return res.status(404).json({ message: 'Job not found' })
+    if (job.employerId !== user.id && user.role !== 'ADMIN') return res.status(403).json({ message: 'Not your job' })
+    const { title, description, location, salary, company } = req.body
+    const updated = await prisma.job.update({ where: { id: Number(id) }, data: { title, description, location, salary, company } })
+    return res.json({ job: updated })
+  }
+
   return res.status(405).end()
 }
 

@@ -31,6 +31,18 @@ async function handler(req, res) {
     return res.status(201).json({ job })
   }
 
+  // DELETE — admin can remove a job
+  if (req.method === 'DELETE') {
+    const user = req.session.user
+    if (!user) return res.status(401).json({ message: 'Unauthorized' })
+    if (user.role !== 'ADMIN') return res.status(403).json({ message: 'Admins only' })
+    const { id } = req.body
+    if (!id) return res.status(400).json({ message: 'Job ID required' })
+    await prisma.jobApplication.deleteMany({ where: { jobId: Number(id) } })
+    await prisma.job.delete({ where: { id: Number(id) } })
+    return res.json({ message: 'Job deleted' })
+  }
+
   return res.status(405).end()
 }
 

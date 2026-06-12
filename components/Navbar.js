@@ -266,8 +266,8 @@ export default function Navbar({ currentUser }) {
                             <div className="px-4 py-2">
                               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Quick Actions</p>
                             </div>
-                            <Link 
-                              href="/jobs/create"
+                            <Link
+                              href="/jobs/post"
                               className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors group"
                               onClick={closeDropdown}
                             >

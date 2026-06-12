@@ -115,8 +115,9 @@ export default function AdminDashboard({ currentUser }) {
                 <p className="text-gray-600 mt-1">Platform overview and management</p>
               </div>
               <div className="flex space-x-3">
-                <Link href="/admin/reports" className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">Reports</Link>
-                <Link href="/settings" className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">Settings</Link>
+                <Link href="/admin/companies" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">Companies</Link>
+                <Link href="/admin/users" className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm">Users</Link>
+                <Link href="/admin/reports" className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm">Reports</Link>
               </div>
             </div>
           </div>
@@ -236,8 +237,8 @@ export default function AdminDashboard({ currentUser }) {
                         </div>
                       </div>
                       <div className="flex space-x-2">
-                        <button className="text-xs text-blue-600 hover:text-blue-800">View</button>
-                        <button className="text-xs text-gray-600 hover:text-gray-800">Edit</button>
+                        <Link href="/admin/users" className="text-xs text-blue-600 hover:text-blue-800">View</Link>
+                        <Link href="/admin/users" className="text-xs text-gray-600 hover:text-gray-800">Edit</Link>
                       </div>
                     </div>
                   ))}

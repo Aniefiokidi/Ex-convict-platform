@@ -16,6 +16,13 @@ export const config = {
   },
 }
 
+function cloudinaryConfigured() {
+  const name = process.env.CLOUDINARY_CLOUD_NAME
+  const key  = process.env.CLOUDINARY_API_KEY
+  const sec  = process.env.CLOUDINARY_API_SECRET
+  return name && name !== 'demo' && key && key !== 'demo' && sec && sec !== 'demo'
+}
+
 async function handler(req, res) {
   const user = req.session.user
   if (!user) {
@@ -24,6 +31,13 @@ async function handler(req, res) {
 
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
+  }
+
+  if (!cloudinaryConfigured()) {
+    return res.json({
+      skipped: true,
+      message: 'File storage is not configured. Please contact the administrator to set up Cloudinary.'
+    })
   }
 
   try {

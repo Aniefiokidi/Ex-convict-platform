@@ -17,11 +17,27 @@ const ALLOWED_TYPES = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ]
 
+function cloudinaryConfigured() {
+  const name = process.env.CLOUDINARY_CLOUD_NAME
+  const key  = process.env.CLOUDINARY_API_KEY
+  const sec  = process.env.CLOUDINARY_API_SECRET
+  return name && name !== 'demo' && key && key !== 'demo' && sec && sec !== 'demo'
+}
+
 async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
 
   const user = req.session.user
   if (!user) return res.status(401).json({ message: 'Please log in to upload files' })
+
+  // If Cloudinary is not configured, return a graceful skip response
+  if (!cloudinaryConfigured()) {
+    return res.json({
+      url: '',
+      skipped: true,
+      message: 'File storage is not configured — your application will be submitted without a resume attachment.'
+    })
+  }
 
   const form = formidable({ maxFileSize: 5 * 1024 * 1024 })
 
@@ -45,7 +61,7 @@ async function handler(req, res) {
       const stream = cloudinary.uploader.upload_stream(
         {
           resource_type: 'raw',
-          folder: 'restart-platform/resumes',
+          folder: 'riseup-platform/resumes',
           public_id: `resume_${user.id}_${Date.now()}`,
           use_filename: true,
           unique_filename: true

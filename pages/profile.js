@@ -15,6 +15,7 @@ export default function Profile({ currentUser }) {
   const router = useRouter()
   const [user, setUser] = useState(currentUser)
   const [editing, setEditing] = useState(false)
+  const isEmployer = currentUser?.role === 'EMPLOYER'
   const [formData, setFormData] = useState({
     name: currentUser?.name || '',
     phone: currentUser?.phone || '',
@@ -137,12 +138,12 @@ export default function Profile({ currentUser }) {
             {/* Profile Information */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
-                
+                <h2 className="text-xl font-semibold mb-6">{isEmployer ? 'Company Information' : 'Personal Information'}</h2>
+
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Name
+                      {isEmployer ? 'Company Name' : 'Full Name'}
                     </label>
                     {editing ? (
                       <input
@@ -150,6 +151,7 @@ export default function Profile({ currentUser }) {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
+                        placeholder={isEmployer ? 'Your company name' : 'Your full name'}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
                     ) : (
@@ -165,8 +167,15 @@ export default function Profile({ currentUser }) {
                       <input
                         type="tel"
                         name="phone"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={11}
                         value={formData.phone}
-                        onChange={handleInputChange}
+                        onChange={e => {
+                          const digits = e.target.value.replace(/\D/g, '').slice(0, 11)
+                          setFormData(prev => ({ ...prev, phone: digits }))
+                        }}
+                        placeholder="e.g. 08012345678"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
                     ) : (
@@ -176,13 +185,14 @@ export default function Profile({ currentUser }) {
 
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Address
+                      {isEmployer ? 'Business Address' : 'Address'}
                     </label>
                     {editing ? (
                       <textarea
                         name="address"
                         value={formData.address}
                         onChange={handleInputChange}
+                        placeholder={isEmployer ? 'Company address' : 'Your home address'}
                         rows={3}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -191,34 +201,56 @@ export default function Profile({ currentUser }) {
                     )}
                   </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Skills
-                    </label>
-                    {editing ? (
-                      <textarea
-                        name="skills"
-                        value={formData.skills}
-                        onChange={handleInputChange}
-                        placeholder="e.g., Customer Service, Data Entry, Construction..."
-                        rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{user.skills || 'Not provided'}</p>
-                    )}
-                  </div>
+                  {isEmployer ? (
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Industry / Sector
+                      </label>
+                      {editing ? (
+                        <input
+                          type="text"
+                          name="skills"
+                          value={formData.skills}
+                          onChange={handleInputChange}
+                          placeholder="e.g. Manufacturing, Retail, Construction, Technology"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{user.skills || 'Not provided'}</p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Skills
+                      </label>
+                      {editing ? (
+                        <textarea
+                          name="skills"
+                          value={formData.skills}
+                          onChange={handleInputChange}
+                          placeholder="e.g., Customer Service, Data Entry, Construction..."
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      ) : (
+                        <p className="text-gray-900">{user.skills || 'Not provided'}</p>
+                      )}
+                    </div>
+                  )}
 
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Experience
+                      {isEmployer ? 'About the Company' : 'Work Experience'}
                     </label>
                     {editing ? (
                       <textarea
                         name="experience"
                         value={formData.experience}
                         onChange={handleInputChange}
-                        placeholder="Describe your work experience..."
+                        placeholder={isEmployer
+                          ? 'Describe your company, what you do, and the kind of candidates you are looking for...'
+                          : 'Describe your work history and relevant experience...'}
                         rows={4}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -242,8 +274,8 @@ export default function Profile({ currentUser }) {
               </div>
             </div>
 
-            {/* Resume Upload */}
-            <div className="lg:col-span-3">
+            {/* Resume Upload — only for non-employers */}
+            {!isEmployer && <div className="lg:col-span-3">
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-xl font-semibold mb-6">Resume & Documents</h2>
                 
@@ -297,7 +329,7 @@ export default function Profile({ currentUser }) {
                   </div>
                 </div>
               </div>
-            </div>
+            </div>}
           </div>
         </div>
       </main>

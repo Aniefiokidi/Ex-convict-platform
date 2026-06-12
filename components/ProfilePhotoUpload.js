@@ -41,7 +41,9 @@ export default function ProfilePhotoUpload({ currentPhoto, onPhotoUpdate, size =
 
       const result = await response.json()
 
-      if (response.ok) {
+      if (result.skipped) {
+        setError(result.message || 'Photo upload is not available right now.')
+      } else if (response.ok) {
         onPhotoUpdate?.(result.fileUrl)
       } else {
         setError(result.message || 'Upload failed')

@@ -167,7 +167,7 @@ export default function EmployerDashboard({ currentUser }) {
                         </div>
                         <div className="flex space-x-2">
                           <Link href={`/jobs/${job.id}`} className="text-sm text-blue-600 hover:text-blue-800">View</Link>
-                          <Link href={`/jobs/${job.id}/edit`} className="text-sm text-gray-600 hover:text-gray-800">Edit</Link>
+                          <Link href={`/jobs/edit/${job.id}`} className="text-sm text-gray-600 hover:text-gray-800">Edit</Link>
                         </div>
                       </div>
                     </div>
@@ -180,7 +180,7 @@ export default function EmployerDashboard({ currentUser }) {
             <div className="bg-white rounded-lg shadow p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-gray-900">Recent Applications</h2>
-                <Link href="/applications" className="text-sm text-blue-600 hover:text-blue-800">View all</Link>
+                <Link href="/dashboard/employer" className="text-sm text-blue-600 hover:text-blue-800">View all</Link>
               </div>
 
               {applications.length === 0 ? (
