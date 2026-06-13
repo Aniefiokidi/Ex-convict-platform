@@ -114,9 +114,11 @@ export default function AdminDashboard({ currentUser }) {
                 <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
                 <p className="text-gray-600 mt-1">Platform overview and management</p>
               </div>
-              <div className="flex space-x-3">
+              <div className="flex flex-wrap gap-2">
                 <Link href="/admin/companies" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">Companies</Link>
                 <Link href="/admin/users" className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm">Users</Link>
+                <Link href="/admin/applications" className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm">Applications</Link>
+                <Link href="/admin/trainings" className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm">Trainings</Link>
                 <Link href="/admin/reports" className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm">Reports</Link>
               </div>
             </div>

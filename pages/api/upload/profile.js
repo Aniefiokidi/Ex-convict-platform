@@ -33,20 +33,12 @@ async function handler(req, res) {
     return res.status(405).json({ message: 'Method not allowed' })
   }
 
-  if (!cloudinaryConfigured()) {
-    return res.json({
-      skipped: true,
-      message: 'File storage is not configured. Please contact the administrator to set up Cloudinary.'
-    })
-  }
-
   try {
     const form = formidable({
-      maxFileSize: 10 * 1024 * 1024, // 10MB limit
+      maxFileSize: 10 * 1024 * 1024,
       filter: ({ mimetype }) => {
-        // Allow images and PDFs
         return mimetype && (
-          mimetype.startsWith('image/') || 
+          mimetype.startsWith('image/') ||
           mimetype === 'application/pdf' ||
           mimetype === 'application/msword' ||
           mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -55,8 +47,16 @@ async function handler(req, res) {
     })
 
     const [fields, files] = await form.parse(req)
+
+    if (!cloudinaryConfigured()) {
+      return res.json({
+        skipped: true,
+        message: 'File storage is not configured. Please contact the administrator to set up Cloudinary.'
+      })
+    }
+
     const uploadType = fields.type?.[0] // 'profile' or 'resume'
-    
+
     if (!files.file || !files.file[0]) {
       return res.status(400).json({ message: 'No file uploaded' })
     }

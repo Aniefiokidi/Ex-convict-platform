@@ -17,7 +17,6 @@ export default function FileUpload({
   const handleFileSelect = async (file) => {
     if (!file) return
 
-    // Validate file size
     const maxSize = maxSizeMB * 1024 * 1024
     if (file.size > maxSize) {
       onUploadError?.(`File size must be less than ${maxSizeMB}MB`)
@@ -25,6 +24,9 @@ export default function FileUpload({
     }
 
     setUploading(true)
+
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 30000)
 
     try {
       const formData = new FormData()
@@ -34,10 +36,17 @@ export default function FileUpload({
       const endpoint = type === 'attachment' ? '/api/upload/attachment' : '/api/upload/profile'
       const response = await fetch(endpoint, {
         method: 'POST',
-        body: formData
+        body: formData,
+        signal: controller.signal
       })
 
-      const result = await response.json()
+      let result
+      try {
+        result = await response.json()
+      } catch {
+        onUploadError?.('Upload failed — please try again.')
+        return
+      }
 
       if (result.skipped) {
         onUploadError?.(result.message || 'File upload is not available right now.')
@@ -47,8 +56,13 @@ export default function FileUpload({
         onUploadError?.(result.message || 'Upload failed')
       }
     } catch (error) {
-      onUploadError?.(error.message || 'Upload failed')
+      if (error.name === 'AbortError') {
+        onUploadError?.('Upload timed out — please try again with a smaller file.')
+      } else {
+        onUploadError?.(error.message || 'Upload failed')
+      }
     } finally {
+      clearTimeout(timeout)
       setUploading(false)
     }
   }
